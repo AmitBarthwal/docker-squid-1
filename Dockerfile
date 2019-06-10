@@ -3,6 +3,7 @@ FROM alpine:3.9.4 as build
 ENV SQUID_VER 4.7
 ENV SQUID_SIG_KEY B06884EDB779C89B044E64E3CD6DBF8EF3B17D3E
 
+USER root
 RUN chmod 777 /var/log/squid/*
 
 RUN set -x && \
@@ -140,6 +141,6 @@ RUN	set -x && \
 VOLUME ["/var/cache/squid"]	
 EXPOSE 3128/tcp
 
-USER root
+USER squid
 
 CMD ["sh", "-c", "/usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -z && exec /usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -YCd 1"]
