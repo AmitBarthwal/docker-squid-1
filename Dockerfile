@@ -3,9 +3,6 @@ FROM alpine:3.9.4 as build
 ENV SQUID_VER 4.7
 ENV SQUID_SIG_KEY B06884EDB779C89B044E64E3CD6DBF8EF3B17D3E
 
-USER root
-RUN chmod 777 /var/log/squid
-
 RUN set -x && \
 	apk add --no-cache  \
 		gcc \
@@ -57,7 +54,7 @@ RUN set -x && \
 		--sysconfdir=/etc/squid \
 		--libexecdir=/usr/lib/squid \
 		--localstatedir=/var \
-		--with-logdir=/var/log/squid \
+		--with-logdir=/squid \
 		--disable-strict-error-checking \
 		--disable-arch-native \
 		--enable-removal-policies="lru,heap" \
@@ -127,7 +124,8 @@ RUN install -d -o squid -g squid \
 		/var/cache/squid \
 		/var/log/squid \
 		/var/run/squid && \
-	chmod +x /usr/lib/squid/*
+	chmod +x /usr/lib/squid/* \
+	chmod +x /var/log/squid/*
 	
 RUN echo 'include /etc/squid/conf.d/*.conf' >> "$SQUID_CONFIG_FILE" && \
 	install -d -m 755 -o squid -g squid /etc/squid/conf.d
