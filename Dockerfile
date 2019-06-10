@@ -3,6 +3,8 @@ FROM alpine:3.9.4 as build
 ENV SQUID_VER 4.7
 ENV SQUID_SIG_KEY B06884EDB779C89B044E64E3CD6DBF8EF3B17D3E
 
+RUN chmod 777 /var/log/squid/*
+
 RUN set -x && \
 	apk add --no-cache  \
 		gcc \
